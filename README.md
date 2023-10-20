@@ -57,5 +57,28 @@ const app = new Elysia()
   })
 ```
 
+## Plugin
+plugin.ts
+```javascript
+import {Elysia} from 'elysia'
+
+const plugin = new Elysia()
+    .state("plugin-version", 1)
+    .get('/plugin', (context) => {
+        return `Plugin version: ${context.store['plugin-version']}`
+    });
+
+export default plugin;
+```
+index.ts
+```javascript
+import { Elysia } from "elysia";
+import plugin from "./plugin";
+
+const app = new Elysia()
+  .use(plugin)
+  .listen(5000);
+```
+
 
 
