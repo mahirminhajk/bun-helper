@@ -1,20 +1,12 @@
 import { Elysia } from "elysia";
 
-const app = new Elysia().listen(5000);
-
-app.post("/id/:id", (context) => {
-  const body = context.body;
-  const id = context.params.id;
-  const query = context.query;
-  const store = context.store;
-    
-  context.set.status = 201;
-  
-  return new Response(JSON.stringify({ body, id, query, store }), {
-    headers: { "Content-Type": "application/json" },
-  });
-
-});
+const app = new Elysia()
+  .state("version", 1)
+  .decorate("getDate", () => new Date().toLocaleDateString())
+  .get("/", (context) => {
+    return `${context.store.version} - ${context.getDate()}`;
+  })
+  .listen(5000);
 
 console.log(
   `🦊 Elysia is running at ${app.server?.hostname}:${app.server?.port}`

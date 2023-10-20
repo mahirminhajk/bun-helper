@@ -47,3 +47,15 @@ app.post("/id/:id", (context) => {
   });
 ```
 
+## State and Decorate
+```javascript
+const app = new Elysia()
+  .state("version", 1)
+  .decorate("getDate", () => new Date().toLocaleDateString())
+  .get("/", (context) => {
+    return `${context.store.version} - ${context.getDate()}`;
+  })
+```
+
+
+
