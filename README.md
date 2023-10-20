@@ -1,10 +1,4 @@
-# Elysia with Bun runtime
-
-## Getting Started
-To get started with this template, simply paste this command into your terminal:
-```bash
-bun create elysia ./elysia-example
-```
+# Bun
 
 ## Development
 To start the development server run:
@@ -12,4 +6,22 @@ To start the development server run:
 bun run dev
 ```
 
-Open http://localhost:3000/ with your browser to see the result.
+## Quick Start
+```javascript
+import {Elysia} from 'elysia';
+
+const app = new Elysia().listen(3000);
+
+console.log(
+  `Elysia is running at ${app.server?.hostname}:${app.server?.port}`);
+```
+
+## Routing
+```javascript
+const app = new Elysia()
+  .get("/", () => "Hello Elysia") 
+  .post("/hello", () => "Hello World")
+  .get('/product/:id', ({params: {id}})=> `Product ${id}`)
+  .get('/user/*', () => 'User is here')
+  .listen(5000);
+```
