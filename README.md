@@ -25,3 +25,25 @@ const app = new Elysia()
   .get('/user/*', () => 'User is here')
   .listen(5000);
 ```
+
+## Handler
+
+### Context
+```javascript
+app.post("/id/:id", (context) => {
+  const body = context.body;
+  const id = context.params.id;
+  const query = context.query;
+  const store = context.store;
+    
+  context.set.status = 201;
+  return { id, body, query, store };
+});
+```
+### Response
+```javascript
+  return new Response(JSON.stringify({ body, id, query, store }), {
+    headers: { "Content-Type": "application/json" },
+  });
+```
+
