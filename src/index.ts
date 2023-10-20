@@ -1,4 +1,5 @@
 import { Elysia } from "elysia";
+import plugin from "./plugin";
 
 const app = new Elysia()
   .state("version", 1)
@@ -6,6 +7,7 @@ const app = new Elysia()
   .get("/", (context) => {
     return `${context.store.version} - ${context.getDate()}`;
   })
+  .use(plugin)
   .listen(5000);
 
 console.log(
