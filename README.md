@@ -116,4 +116,32 @@ app.group('/v1', app => app
 )
 ```
 
+## Hook
+
+### Global Hook
+> we can access the context in the hook
+```javascript
+```javascript
+.onRequest(()=>console.log("we got a request"))
+```
+or
+```javascript
+.on('request', () => console.log('we got a request'))
+```
+
+### Route Hook(Local Hook)
+```javascript
+.get("/", (context) => {
+    return `${context.store.version} - ${context.getDate()}`;
+  }, {
+    beforeHandle:() => console.log('before handle'),
+    afterHandle:() => console.log('after handle'),
+  }
+)
+```
+output
+```bash
+before handle
+after handle
+```
 
