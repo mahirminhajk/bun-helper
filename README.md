@@ -191,3 +191,32 @@ const app = new Elysia()
         response: 'sign'
     })
 ```
+### transform
+> by default, the params, query, body will be string, we can transform them to other type
+> in this example, we transform the id to number
+```javascript
+import { Elysia, t } from 'elysia'
+
+interface Params{
+  id: number;
+}
+
+.get("/id/:id", ({params:{id}}: {params: Params}) => id, {
+    params: t.Object({
+      id: t.Number(),
+    }),
+    transform({params}){
+      const id = +params.id;
+
+      if(!Number.isNaN(id)) params.id = id;
+    }
+  })
+```
+> it's a little bit redundant and requires boilerplate, so Elysia provides a helper function to do this
+```javascript
+app.get('/id/:id', ({ params: { id } }) => id, {
+    params: t.Object({
+        id: t.Numeric()
+    })
+})
+```

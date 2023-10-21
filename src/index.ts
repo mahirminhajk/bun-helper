@@ -6,6 +6,10 @@ interface Body{
   age: number;
 }
 
+interface Params{
+  id: number;
+}
+
 
 const app = new Elysia()
   .state("version", 1)
@@ -21,6 +25,16 @@ const app = new Elysia()
       name: t.String(),
       age: t.Number(),
     })
+  })
+  .get("/id/:id", ({params:{id}}: {params: Params}) => id, {
+    params: t.Object({
+      id: t.Number(),
+    }),
+    transform({params}){
+      const id = +params.id;
+
+      if(!Number.isNaN(id)) params.id = id;
+    }
   })
   .use(plugin)
   .use(configPlugin({ prefix: "/v2" }))
