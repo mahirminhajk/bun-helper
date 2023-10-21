@@ -79,6 +79,21 @@ const app = new Elysia()
   .use(plugin)
   .listen(5000);
 ```
+### Plugin with a prefix
+plugin.ts
+```javascript
+```javascript
+export const configPlugin = <Prefix extends string | undefined>({ prefix = "/v1" }: { prefix: Prefix }) =>
+  new Elysia({ prefix }).get(`/hi`, () => "Hi");
+```
+index.ts
+```javascript
+.use(configPlugin({ prefix: "/v2" }))
+```
+### Official Plugins(middleware)
+https://elysiajs.com/plugins/overview.html
+
+
 
 
 

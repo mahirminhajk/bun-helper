@@ -1,5 +1,5 @@
 import { Elysia } from "elysia";
-import plugin from "./plugin";
+import {configPlugin, plugin} from "./plugin";
 
 const app = new Elysia()
   .state("version", 1)
@@ -8,6 +8,7 @@ const app = new Elysia()
     return `${context.store.version} - ${context.getDate()}`;
   })
   .use(plugin)
+  .use(configPlugin({ prefix: "/v2" }))
   .listen(5000);
 
 console.log(
