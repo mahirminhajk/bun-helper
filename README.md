@@ -629,3 +629,30 @@ new Elysia()
 		throw new CustomError('Hello Error');
 	})
 ```
+
+# WebSocket
+
+```javascript
+import { Elysia } from "elysia";
+
+const app = new Elysia()
+  .ws("/ws", {
+    message(ws, message) {
+      ws.send(message);
+    },
+  })
+  .listen(8080);
+```
+
+### webSocket Configuration
+
+```javascript
+new Elysia({
+  websocket: {
+    idleTimeout: 30,
+  },
+});
+```
+
+> for more information, please check https://elysiajs.com/patterns/websocket.html
+
