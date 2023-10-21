@@ -247,3 +247,61 @@ app.group(
     app => app.get('/student', () => 'Rikuhachima Aru')
 )
 ```
+
+# type of body
+```javascript
+app.post('/', ({ body }) => body, {
+    // Short form of application/json
+    type: 'json',
+})
+```
+> different type of body
+-    // Shorthand for 'text/plain' = 'text'
+-    // Shorthand for 'application/json' = 'json'
+-    // Shorthand for 'multipart/form-data' = 'formdata'
+-    // Shorthand for 'application/x-www-form-urlencoded' = 'urlencoded'
+
+
+# After Handle
+```javascript
+import { Elysia } from 'elysia'
+
+new Elysia()
+    .onAfterHandle((context) => {
+        if(typeof context.response === 'number')
+            context.response += 1
+    })
+    .get('/', () => 1, {
+        afterHandle(context) {
+            if(typeof context.response === 'number')
+                context.response += 1
+        }
+    })
+    .listen(3000)
+```
+output
+```bash
+3
+```
+## Early Return
+```javascript
+import { Elysia } from 'elysia'
+
+new Elysia()
+    .onAfterHandle(({ response }) => {
+        if(typeof response === 'number')
+            return response + 1
+    })
+    .get('/', () => 1, {
+        afterHandle(context) {
+            if(typeof context.response === 'number')
+                context.response += 1
+        }
+    })
+    .listen(3000)
+```
+output
+```bash
+2
+```
+>output 2 instead of 3, because the **onAfterHandle** will return 2, so the **afterHandle** will not be executed
