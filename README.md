@@ -406,3 +406,127 @@ const app = new Elysia().post("/multiple", ({ body: { files } }) => files[0], {
     }),
   })
 ```
+
+# Cookie
+
+```javascript
+app.get("/", ({ cookie: { name } }) => {
+  // Get
+  name.value;
+
+  // Set
+  name.value = "New Value";
+  name.value = {
+    hello: "world",
+  };
+});
+```
+
+### set
+
+> set allow us to set update multiple cookie property all at once, by reset all property and overwrite it with a new value.
+
+```javascript
+app.get("/", ({ cookie: { name } }) => {
+  name.set({
+    domain: "millennium.sh",
+    httpOnly: true,
+  });
+});
+```
+
+### add
+
+> add allow us to add new cookie property without reset all property
+
+### remove
+
+> remove allow us to remove cookie property
+
+```javascript
+name.remove();
+delete cookie.name;
+```
+
+### Cookie Schema
+
+```javascript
+app.get(
+  "/",
+  ({ cookie: { name } }) => {
+    // Set
+    name.value = {
+      id: 617,
+      name: "Summoning 101",
+    };
+  },
+  {
+    cookie: t.Cookie({
+      value: t.Object({
+        id: t.Numeric(),
+        name: t.String(),
+      }),
+    }),
+  }
+);
+```
+
+### Cookie Signature
+
+> we can sign the cookie
+> in this example, it is local cookie signature, which means the cookie signature only work for this route
+
+```javascript
+new Elysia().get(
+  "/",
+  ({ cookie: { profile } }) => {
+    profile.value = {
+      id: 617,
+      name: "Summoning 101",
+    };
+  },
+  {
+    cookie: t.Cookie(
+      {
+        profile: t.Object({
+          id: t.Numeric(),
+          name: t.String(),
+        }),
+      },
+      {
+        secret: "Fischl von Luftschloss Narfidort",
+        sign: ["profile"],
+      }
+    ),
+  }
+);
+```
+
+### Golbal Cookie Signature
+
+> we can set the cookie signature globally
+
+```javascript
+new Elysia({
+  cookie: {
+    secret: "Fischl von Luftschloss Narfidort",
+    sign: ["profile"],
+  },
+});
+```
+
+### Cookie Rotation
+
+> we can rotate the cookie signature
+> Elysia handle Cookie's secret rotation automatically.
+
+```javascript
+new Elysia({
+  cookie: {
+    secret: ["Vengeance will be mine", "Fischl von Luftschloss Narfidort"],
+  },
+});
+```
+
+> for more information, please check https://elysiajs.com/patterns/cookie-signature.html#config
+
