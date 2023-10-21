@@ -602,3 +602,30 @@ new Elysia().post("/", ({ body }) => body, {
 - UNKNOWN
   > by default, the error code is UNKNOWN
   > we can get the error name by **error.name**
+
+## Custom Error
+
+```javascript
+class CustomError extends Error {
+    constructor(public message: string) {
+        super(message)
+    }
+}
+
+new Elysia()
+    .addError({
+        MyError: CustomError
+    })
+    .onError(({ code, error }) => {
+        switch(code) {
+            // With auto-completion
+            case 'MyError':
+                // With type narrowing
+                // Error is typed as CustomError
+                return error
+        }
+    })
+	.get('/', () => {
+		throw new CustomError('Hello Error');
+	})
+```
