@@ -1,5 +1,5 @@
 import { Elysia } from "elysia";
-import {configPlugin, plugin} from "./plugin";
+import { configPlugin, plugin } from "./plugin";
 
 const app = new Elysia()
   .state("version", 1)
@@ -9,6 +9,13 @@ const app = new Elysia()
   })
   .use(plugin)
   .use(configPlugin({ prefix: "/v2" }))
+  .group("/api", (app) =>
+    app
+      .get("/", () => "Hello")
+      .post("/sign-in", () => "sing-in")
+      .post("/sign-up", () => "Sign-up")
+      .post("/profile", () => "Profile")
+  )
   .listen(5000);
 
 console.log(

@@ -94,6 +94,26 @@ index.ts
 https://elysiajs.com/plugins/overview.html
 
 
-
+## Group
+```javascript
+.group("/api", (app) =>
+  app
+    .get("/", () => "Hello")
+    .post("/sign-in", () => "sing-in")
+    .post("/sign-up", () => "Sign-up")
+    .post("/profile", () => "Profile")
+)
+```
+### nested group
+```javascript
+app.group('/v1', app => app
+    .get('/', () => 'Using v1')
+    .group('/user', app => app
+        .post('/sign-in', signIn)
+        .post('/sign-up', signUp)
+        .post('/profile', getProfile)
+    )
+)
+```
 
 
