@@ -220,3 +220,30 @@ app.get('/id/:id', ({ params: { id } }) => id, {
     })
 })
 ```
+## Guard
+
+> we can use guard to check the request body, params, query, etc.
+> in this example, we check the body of sign-in and sign-up
+```javascript
+app.guard({
+    body: t.Object({
+        username: t.String(),
+        password: t.String()
+    })
+}, app => app
+    .post('/sign-up', ({ body }) => signUp(body))
+    .post('/sign-in', ({ body }) => signIn(body), {
+         beforeHandle: isUserExists
+    })
+)
+```
+
+### Group Guard
+```javascript
+app.group(
+    '/v1', {
+        body: t.Literal('Rikuhachima Aru')
+    }, 
+    app => app.get('/student', () => 'Rikuhachima Aru')
+)
+```
