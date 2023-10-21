@@ -656,3 +656,63 @@ new Elysia({
 
 > for more information, please check https://elysiajs.com/patterns/websocket.html
 
+# Reference Models
+
+```javascript
+import { Elysia, t } from "elysia";
+
+// Maybe in a different file eg. models.ts and export it
+const SignDTO = t.Object({
+  username: t.String(),
+  password: t.String(),
+});
+
+const app = new Elysia().post("/sign-in", ({ body }) => body, {
+  body: SignDTO,
+  response: SignDTO,
+});
+```
+
+```javascript
+// auth.model.ts
+import { Elysia, t } from "elysia";
+
+export const authModel = new Elysia().model({
+  sign: t.Object({
+    username: t.String(),
+    password: t.String(),
+  }),
+});
+
+// index.ts
+import { Elysia } from "elysia";
+import { authModel } from "./auth.model.ts";
+
+const app = new Elysia().use(authModel).post("/sign-in", ({ body }) => body, {
+  // with auto-completion for existing model name
+  body: "sign",
+  response: "sign",
+});
+```
+
+### Naming Convention
+
+> Duplicated model names will cause Elysia to throw an error. To prevent declaring duplicate model names, you can use the following naming convention.
+
+```javascript
+// admin.model.ts
+export const authModel = new Elysia().model({
+  "admin.auth": t.Object({
+    username: t.String(),
+    password: t.String(),
+  }),
+});
+
+// user.model.ts
+export const authModel = new Elysia().model({
+  "user.auth": t.Object({
+    username: t.String(),
+    password: t.String(),
+  }),
+});
+```
