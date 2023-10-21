@@ -145,3 +145,49 @@ before handle
 after handle
 ```
 
+### Local Schema Hook
+```javascript
+import { Elysia, t } from 'elysia'
+
+interface Body{
+  name: string;
+  age: number;
+}
+
+app.post('/create', ({body} : {body: Body}) => body,{
+  body: t.Object({
+    name: t.String(),
+    age: t.Number(),
+  })
+})
+```
+### Multiple Status Response
+> if the status is 200, the response will be the body which have username and password, or if the status is 400, the response will be a string(error message)
+```javascript
+new Elysia()
+    .post('/', ({ body }) => doSomething(), {
+        response: {
+            200: t.Object({
+                username: t.String(),
+                password: t.String()
+            }),
+            400: t.String()
+        }
+    })
+```
+### Reference Model
+> sometimes we need to reuse some schema, we can use reference model
+```javascript
+const app = new Elysia()
+    .model({
+        sign: t.Object({
+            username: t.String(),
+            password: t.String()
+        })
+    })
+    .post('/sign-in', ({ body }) => body, {
+            // with auto-completion for existing model name
+        body: 'sign',
+        response: 'sign'
+    })
+```

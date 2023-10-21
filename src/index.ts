@@ -1,5 +1,11 @@
-import { Elysia } from "elysia";
+import { Elysia, t } from "elysia";
 import { configPlugin, plugin } from "./plugin";
+
+interface Body{
+  name: string;
+  age: number;
+}
+
 
 const app = new Elysia()
   .state("version", 1)
@@ -9,6 +15,12 @@ const app = new Elysia()
   }, {
     beforeHandle:() => console.log('before handle'),
     afterHandle:() => console.log('after handle'),
+  })
+  .post('/create', ({body} : {body: Body}) => body,{
+    body: t.Object({
+      name: t.String(),
+      age: t.Number(),
+    })
   })
   .use(plugin)
   .use(configPlugin({ prefix: "/v2" }))
