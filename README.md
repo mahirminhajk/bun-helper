@@ -530,3 +530,75 @@ new Elysia({
 
 > for more information, please check https://elysiajs.com/patterns/cookie-signature.html#config
 
+# Error Handling
+
+```javascript
+new Elysia()
+  .onError(({ code, error }) => {
+    return new Response(error.toString());
+  })
+  .get("/", () => {
+    throw new Error("Server is during maintainance");
+
+    return "unreachable";
+  });
+```
+
+## set status code
+
+```javascript
+import { Elysia, NotFoundError } from "elysia";
+
+new Elysia()
+  .onError(({ code, error, set }) => {
+    if (code === "NOT_FOUND") {
+      set.status = 404;
+
+      return "Not Found :(";
+    }
+  })
+  .post("/", () => {
+    throw new NotFoundError();
+  })
+  .listen(8080);
+```
+
+## local error
+
+```javascript
+app.get("/", () => "Hello", {
+  beforeHandle({ set, request: { headers } }) {
+    if (!isSignIn(headers)) {
+      set.status = 401;
+
+      throw new Error("Unauthorized");
+    }
+  },
+  error({ error }) {
+    return "Handled";
+  },
+});
+```
+
+## custom error message
+
+```javascript
+new Elysia().post("/", ({ body }) => body, {
+  body: t.Object({
+    name: t.String({
+      error: "Name is required",
+    }),
+    age: t.Number(),
+  }),
+});
+```
+
+## Error Code
+
+- NOT_FOUND
+- INTERNAL_SERVER_ERROR
+- VALIDATION
+- PARSE
+- UNKNOWN
+  > by default, the error code is UNKNOWN
+  > we can get the error name by **error.name**
